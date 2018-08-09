@@ -7,7 +7,9 @@ import passport from 'passport';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import methodOverride from 'method-override';
-import { Strategy as TwitterStrategy } from 'passport-twitter';
+import TwitterTokenStrategy from 'passport-twitter-token';
+
+import AuthRoutes from './auth';
 
 const app = express();
 const port = process.env.PORT | 8080;
@@ -32,19 +34,25 @@ const TWITTER_AUTH = {
     secret: process.env.TWITTER_CONSUMER_SECRET
 };
 
-passport.use(new TwitterStrategy({
+passport.use(new TwitterTokenStrategy({
       consumerKey: TWITTER_AUTH.key,
       consumerSecret: TWITTER_AUTH.secret,
-      callbackURL: 'http://127.0.0.1:8080'
+      includeEmail: true
   }, (token, tokenSecret, profile, done) => {
       console.log(profile);
       done(null, profile);
   }
 ));
 
-app.get('/auth/twitter', passport.authenticate('twitter'));
-app.get('/auth/twitter/callback', passport.authenticate('twitter', { successRedirect: '/', failureRedirect: '/login' }));
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
 
+passport.deserializeUser(function(user, done) {
+  done(null, user);
+});
+
+app.use('/auth', AuthRoutes);
 app.use(express.static('dist'));
 
 // start the server
