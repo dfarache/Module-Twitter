@@ -5,7 +5,7 @@ import Routes from '../routes';
 
 const App = () =>
     <div>
-        <h1>Filter table</h1>
+        <h1>Test Module</h1>
         { Routes }
         <footer className={footer}>
             <Link to="/">Filterable Table</Link>
