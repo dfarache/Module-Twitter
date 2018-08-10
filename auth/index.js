@@ -14,8 +14,7 @@ const twitterCredentials = {
     consumer_secret: process.env.TWITTER_CONSUMER_SECRET
 };
 
-router.route('/twitter/callback').post((req, res) => {
-  console.log('callback');
+router.route('/twitter/callback').post((req, res) => {  
     request.post({
         url: 'https://api.twitter.com/oauth/request_token',
         oauth: {
@@ -28,7 +27,6 @@ router.route('/twitter/callback').post((req, res) => {
 });
 
 router.route('/twitter').get((req, res, next) => {
-  console.log('non callback');
     request.post({
         url: `https://api.twitter.com/oauth/access_token?oauth_verifier`,
         oauth: {
